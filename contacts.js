@@ -21,17 +21,25 @@ async function getContactById(contactId) {
   return contact ? contact : null;
 }
 
-async function removeContact(contactId) {
-  // ...твой код
-}
-
 async function addContact(name, email, phone) {
   const contacts = await readContacts();
   const newContact = { id: randomUUID(), name, email, phone };
 
   contacts.push(newContact);
-  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 4));
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return newContact;
 }
 
-module.exports = { listContacts, getContactById, addContact };
+async function removeContact(contactId) {
+  const contacts = await readContacts();
+  const contact = contacts.find((contact) => contact.id === contactId);
+
+  if (!contact) return;
+
+  const contactIndex = contacts.indexOf(contact);
+  contacts.splice(contactIndex, 1);
+  await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
+  return contact;
+}
+
+module.exports = { listContacts, getContactById, addContact, removeContact };
