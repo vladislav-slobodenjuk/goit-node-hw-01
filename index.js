@@ -1,7 +1,4 @@
-console.log("first console");
-// console.log("second console");
-
-// console.log(process.argv[2]);
+console.log("start program");
 
 const { listContacts, addContact, getContactById } = require("./contacts");
 const { Command } = require("commander");
@@ -27,11 +24,17 @@ async function invokeAction({ action, id, name, email, phone }) {
       break;
 
     case "get":
-      // ... id
+      const contactById = await getContactById(id);
+      if (!contactById) {
+        console.log("Id Not Found");
+        return;
+      }
+      console.log(contactById);
       break;
 
     case "add":
-      // ... name email phone
+      const newContact = await addContact(name, email, phone);
+      console.log("added new contact:", newContact);
       break;
 
     case "remove":
