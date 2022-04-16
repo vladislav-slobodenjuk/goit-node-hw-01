@@ -32,12 +32,11 @@ async function addContact(name, email, phone) {
 
 async function removeContact(contactId) {
   const contacts = await readContacts();
-  const contact = contacts.find((contact) => contact.id === contactId);
+  const contactIdx = contacts.findIndex((contact) => contact.id === contactId);
 
-  if (!contact) return;
+  if (contactIdx < 0) return null;
 
-  const contactIndex = contacts.indexOf(contact);
-  contacts.splice(contactIndex, 1);
+  const [contact] = contacts.splice(contactIdx, 1); // деструк-ция поскольку splice возвращает массив
   await fs.writeFile(contactsPath, JSON.stringify(contacts, null, 2));
   return contact;
 }
